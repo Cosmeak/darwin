@@ -1,0 +1,29 @@
+{
+  "name": "discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot boilerplate ",
+  "main": "src/index.js ",
+  "keywords": ["discord", "bot"],
+  "author": "cosmeak<guillaume.fine@cosmeak.dev>",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.2.0"
+  },
+  "dependencies": {
+    "discord.js": "^14.15.2",
+    "colorette": "^2.0.20",
+    "dotenv": "^16.0.3"
+  },
+  "scripts": {
+    "dev": "node --watch-path=./src ./src/index.js",
+    "start": "node ./src/index.js --max-old-space-size=4096",
+    "lint": "eslint --ext .js --max-warnings 0 ./src/",
+    "lint:fix": "eslint --ext .js --fix ./src/",
+    "deploy:commands": "node ./bin/deploy-commands.js"
+  }
+}
