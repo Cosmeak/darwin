@@ -1,8 +1,13 @@
-const { REST, Routes } = require("discord.js");
-const fs = require("node:fs");
-const path = require("node:path");
-const logger = require("../src/services/Logger");
-require("dotenv").config();
+import { REST, Routes } from "discord.js";
+import fs from "node:fs";
+import path from "node:path";
+import {Logger} from "../src/services/Logger.js";
+import dotenv from 'dotenv';
+dotenv.config();
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 (async () => {
   const commands = [];
@@ -12,12 +17,12 @@ require("dotenv").config();
     .filter((file) => file.endsWith(".js"));
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    commands.push(command.data.toJSON());
+    const command = await import(filePath);
+    commands.push(command.default.data.toJSON());
   }
   const rest = new REST({ version: "10" }).setToken(process.env.BOT_TOKEN);
   try {
-    logger.log(
+    Logger.log(
       `Started refreshing ${commands.length} application (/) commands`,
     );
     const data = await rest.put(
@@ -27,10 +32,10 @@ require("dotenv").config();
       ),
       { body: commands },
     );
-    logger.success(
+    Logger.success(
       `Successfully reloaded ${data.length} application (/) commands.`,
     );
   } catch (error) {
-    logger.error(error);
+    Logger.error(error);
   }
 })();
